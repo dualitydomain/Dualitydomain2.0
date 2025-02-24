@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
@@ -249,31 +249,30 @@ function ProjectCard({ project }: { project: (typeof projects)[0] }) {
 
 export default function ProjectsPage() {
   const [selectedCategory, setSelectedCategory] = useState("all")
+  const [mounted, setMounted] = useState(false)
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
-  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  const handleResize = useCallback(() => {
+    setMounted(true)
     setDimensions({
       width: window.innerWidth,
       height: window.innerHeight,
     })
-  }, [])
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
+    const handleResize = () => {
       setDimensions({
         width: window.innerWidth,
         height: window.innerHeight,
       })
-
-      window.addEventListener("resize", handleResize)
-      return () => window.removeEventListener("resize", handleResize)
     }
-  }, [handleResize])
+
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
 
   const filteredProjects =
     selectedCategory === "all" ? projects : projects.filter((project) => project.category === selectedCategory)
