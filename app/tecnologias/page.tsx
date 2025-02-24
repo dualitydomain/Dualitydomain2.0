@@ -215,14 +215,14 @@ function TechnologyCard({ tech, index }: { tech: (typeof technologies.frontend)[
 }
 
 export default function TechnologiesPage() {
-  const [mounted, setMounted] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
+    setIsMounted(true)
   }, [])
 
-  if (!mounted) {
-    return null // or a loading placeholder
+  if (!isMounted) {
+    return null
   }
 
   return (
@@ -342,3 +342,4 @@ export default function TechnologiesPage() {
     </div>
   )
 }
+
