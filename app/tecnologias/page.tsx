@@ -1,12 +1,12 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import GlitchText from "@/components/glitch-text"
-import { useState, useEffect } from "react"
 
 const technologies = {
   frontend: [
@@ -90,15 +90,19 @@ const technologies = {
 }
 
 function TechnologyCard({ tech, index }: { tech: (typeof technologies.frontend)[0]; index: number }) {
-  const [isBrowser, setIsBrowser] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setIsBrowser(true)
+    setMounted(true)
   }, [])
+
+  if (!mounted) {
+    return null
+  }
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20, scale: isBrowser ? 0.9 : 1 }}
+      initial={{ opacity: 0, y: 20, scale: mounted ? 0.9 : 1 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="group relative"
@@ -215,13 +219,13 @@ function TechnologyCard({ tech, index }: { tech: (typeof technologies.frontend)[
 }
 
 export default function TechnologiesPage() {
-  const [isMounted, setIsMounted] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setIsMounted(true)
+    setMounted(true)
   }, [])
 
-  if (!isMounted) {
+  if (!mounted) {
     return null
   }
 
