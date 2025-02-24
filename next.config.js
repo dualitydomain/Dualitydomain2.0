@@ -12,12 +12,25 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (config, { isServer }) => {
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Add JSON loader
     config.module.rules.push({
       test: /\.json$/,
-      type: "json",
+      type: "javascript/auto",
+      use: [
+        {
+          loader: "json-loader",
+        },
+      ],
     })
+
+    // Add source map support
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      }
+    }
 
     return config
   },
