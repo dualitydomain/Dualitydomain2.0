@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown, ChevronRight } from "lucide-react"
 import Link from "next/link"
@@ -25,6 +25,15 @@ interface DesktopServicesMenuProps {
 export default function DesktopServicesMenu({ services, isOpen, onClose }: DesktopServicesMenuProps) {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
   const [hoveredService, setHoveredService] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
 
   return (
     <AnimatePresence>
