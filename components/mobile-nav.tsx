@@ -32,6 +32,7 @@ export default function MobileNav({ isOpen, onClose, services }: MobileNavProps)
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
   const [hoveredService, setHoveredService] = useState<string | null>(null)
   const [animationComplete, setAnimationComplete] = useState(false)
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
 
   useEffect(() => {
     if (!isOpen) {
@@ -39,6 +40,25 @@ export default function MobileNav({ isOpen, onClose, services }: MobileNavProps)
       setAnimationComplete(false)
     }
   }, [isOpen])
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+
+      const handleResize = () => {
+        setDimensions({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        })
+      }
+
+      window.addEventListener("resize", handleResize)
+      return () => window.removeEventListener("resize", handleResize)
+    }
+  }, [])
 
   return (
     <AnimatePresence>
@@ -59,14 +79,14 @@ export default function MobileNav({ isOpen, onClose, services }: MobileNavProps)
                   key={i}
                   className="absolute w-1 h-1 bg-[#5CE1E6] rounded-full"
                   initial={{
-                    x: Math.random() * window.innerWidth,
-                    y: Math.random() * window.innerHeight,
+                    x: dimensions.width * Math.random(),
+                    y: dimensions.height * Math.random(),
                     opacity: 0,
                   }}
                   animate={{
                     opacity: [0, 1, 0],
-                    x: Math.random() * window.innerWidth,
-                    y: Math.random() * window.innerHeight,
+                    x: dimensions.width * Math.random(),
+                    y: dimensions.height * Math.random(),
                   }}
                   transition={{
                     duration: Math.random() * 3 + 2,
