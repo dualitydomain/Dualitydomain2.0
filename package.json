@@ -22,7 +22,8 @@
     "react-dom": "^18.2.0",
     "tailwind-merge": "^2.0.0",
     "inflight": "^1.0.6",
-    "three": "^0.160.0"
+    "three": "^0.160.0",
+    "glob": "^10.3.10"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",
