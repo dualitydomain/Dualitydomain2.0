@@ -207,11 +207,23 @@ function DesktopServicesMenu({ services, isOpen, onClose }: DesktopServicesMenuP
 export default function Header() {
   const [isServicesOpen, setIsServicesOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const { scrollY } = useScroll()
+  const [scrollY, setScrollY] = useState(0)
+  const { scrollY: useScrollY } = useScroll()
 
-  const headerBg = useTransform(scrollY, [0, 100], ["rgba(0, 33, 51, 0)", "rgba(0, 33, 51, 0.8)"])
+  const headerBg = useTransform(useScrollY, [0, 100], ["rgba(0, 33, 51, 0)", "rgba(0, 33, 51, 0.8)"])
 
-  const headerBorder = useTransform(scrollY, [0, 100], ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 0.1)"])
+  const headerBorder = useTransform(useScrollY, [0, 100], ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 0.1)"])
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const handleScroll = () => {
+        setScrollY(window.scrollY)
+      }
+
+      window.addEventListener("scroll", handleScroll)
+      return () => window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
 
   useEffect(() => {
     if (isMobileMenuOpen) {
