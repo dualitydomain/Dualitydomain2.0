@@ -249,16 +249,11 @@ function ProjectCard({ project }: { project: (typeof projects)[0] }) {
 
 export default function ProjectsPage() {
   const [selectedCategory, setSelectedCategory] = useState("all")
-  const [mounted, setMounted] = useState(false)
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    setDimensions({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    })
-
     const handleResize = () => {
       setDimensions({
         width: window.innerWidth,
@@ -266,16 +261,27 @@ export default function ProjectsPage() {
       })
     }
 
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
+    if (typeof window !== "undefined") {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+      window.addEventListener("resize", handleResize)
+    }
 
-  if (!mounted) {
-    return null
-  }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("resize", handleResize)
+      }
+    }
+  }, [])
 
   const filteredProjects =
     selectedCategory === "all" ? projects : projects.filter((project) => project.category === selectedCategory)
+
+  if (!mounted) {
+    return null // or a loading spinner
+  }
 
   return (
     <div className="min-h-screen pt-16">
