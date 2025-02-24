@@ -1,10 +1,10 @@
 [build]
-  command = "npm run build"
+  command = "chmod +x ./install-dependencies.sh && ./install-dependencies.sh && npm run build"
   publish = ".next"
 
 [build.environment]
-  NODE_VERSION = "20.11.0"
-  NPM_VERSION = "10.2.4"
+  NODE_VERSION = "18.17.0"
+  NPM_VERSION = "9.6.7"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
