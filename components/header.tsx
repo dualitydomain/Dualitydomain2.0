@@ -9,6 +9,14 @@ import Link from "next/link"
 import { Menu, ChevronDown, ArrowRight } from "lucide-react"
 import MobileNav from "./mobile-nav"
 
+interface Service {
+  title: string
+  description: string
+  href: string
+  gradient: string
+  icon: string
+}
+
 const services = [
   {
     category: "Páginas Web",
@@ -168,7 +176,7 @@ function DesktopServicesMenu({ services, isOpen, onClose }: DesktopServicesMenuP
               >
                 {services
                   .find((category) => category.category === hoveredCategory)
-                  ?.items.map((service) => (
+                  ?.items.map((service: Service) => (
                     <Link
                       key={service.title}
                       href={service.href}
