@@ -10,51 +10,30 @@ interface GlitchTextProps {
 }
 
 export default function GlitchText({ text, className = "", delay = 0 }: GlitchTextProps) {
-  const [glitchedText, setGlitchedText] = useState(text)
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+  const [displayedText, setDisplayedText] = useState(text)
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout
-    let interval: NodeJS.Timeout
-    let iteration = 0
+    if (currentIndex < text.length) {
+      const timeout = setTimeout(
+        () => {
+          let nextChar = text[currentIndex]
+          let increment = 1
 
-    const startGlitch = () => {
-      clearInterval(interval)
+          if (text.codePointAt(currentIndex)! > 0xffff) {
+            nextChar = text.slice(currentIndex, currentIndex + 2)
+            increment = 2
+          }
 
-      interval = setInterval(() => {
-        setGlitchedText((prev) =>
-          prev
-            .split("")
-            .map((char, idx) => {
-              if (idx < iteration) {
-                return text[idx]
-              }
-              return characters[Math.floor(Math.random() * characters.length)]
-            })
-            .join(""),
-        )
+          setDisplayedText((prev) => prev + nextChar)
+          setCurrentIndex((prev) => prev + increment)
+        },
+        Math.random() * 30 + 20,
+      )
 
-        iteration += 1 / 3
-
-        if (iteration >= text.length) {
-          clearInterval(interval)
-          setGlitchedText(text)
-          iteration = 0
-
-          // Restart glitch effect after a delay
-          timeout = setTimeout(startGlitch, 5000)
-        }
-      }, 30)
+      return () => clearTimeout(timeout)
     }
-
-    // Initial delay
-    timeout = setTimeout(startGlitch, delay)
-
-    return () => {
-      clearTimeout(timeout)
-      clearInterval(interval)
-    }
-  }, [text, delay])
+  }, [currentIndex, text])
 
   return (
     <motion.span
@@ -63,7 +42,7 @@ export default function GlitchText({ text, className = "", delay = 0 }: GlitchTe
       transition={{ duration: 0.5, delay: delay / 1000 }}
       className={className}
     >
-      {glitchedText}
+      {displayedText}
     </motion.span>
   )
 }
