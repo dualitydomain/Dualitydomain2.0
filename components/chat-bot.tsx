@@ -190,9 +190,33 @@ export default function ChatBot() {
   const [showSuggestions, setShowSuggestions] = useState(true)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [isTyping, setIsTyping] = useState(false)
+  const [viewport, setViewport] = useState({ width: 0, height: 0 })
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setViewport({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+
+      const handleResize = () => {
+        setViewport({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        })
+      }
+
+      window.addEventListener("resize", handleResize)
+      return () => window.removeEventListener("resize", handleResize)
+    }
+  }, [])
 
   const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    if (typeof window !== "undefined") {
+      messagesEndRef.current?.scrollIntoView({
+        behavior: "smooth",
+      })
+    }
   }, [])
 
   useEffect(() => {
@@ -447,7 +471,9 @@ export default function ChatBot() {
               className="fixed inset-0 flex items-center justify-center z-50 p-4"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="w-full max-w-sm bg-[#001219] border border-white/10 rounded-lg shadow-xl overflow-hidden">
+              <div
+                className={`w-full max-w-${viewport.width < 640 ? "full" : "sm"} bg-[#001219] border border-white/10 rounded-lg shadow-xl overflow-hidden`}
+              >
                 {/* Header */}
                 <div className="p-3 bg-[#002133] border-b border-white/10 flex items-center justify-between">
                   <div className="flex items-center gap-2">
