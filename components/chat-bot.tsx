@@ -9,8 +9,50 @@ import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { MessageCircle, X, Send, Bot, User } from "lucide-react"
 
-// Base de conocimientos expandida
-const chatbotData = {
+interface ChatbotResponses {
+  greeting: string[]
+  about: string[]
+  services: {
+    general: string[]
+    web: string[]
+    ecommerce: string[]
+    apps: string[]
+    design: string[]
+  }
+  process: string[]
+  contact: string[]
+  social: string[]
+  technologies: string[]
+  pricing: string[]
+  portfolio: string[]
+  default: string[]
+  fallback: string[]
+}
+
+interface ChatbotData {
+  responses: ChatbotResponses
+  suggestions: Record<string, string[]>
+  keywords: {
+    greeting: string[]
+    about: string[]
+    services: {
+      general: string[]
+      web: string[]
+      ecommerce: string[]
+      apps: string[]
+      design: string[]
+    }
+    process: string[]
+    contact: string[]
+    social: string[]
+    technologies: string[]
+    pricing: string[]
+    portfolio: string[]
+  }
+  generateWhatsAppLink: (message: string) => string
+}
+
+const chatbotData: ChatbotData = {
   responses: {
     greeting: [
       "¡Hola! 👋 Soy el asistente virtual de Duality Domain. ¿En qué puedo ayudarte hoy?",
@@ -190,11 +232,10 @@ export default function ChatBot() {
     return "default"
   }
 
-  // Función para obtener una respuesta aleatoria de una categoría
   const getRandomResponse = (category: string): string => {
     const responses = category.includes("services.")
-      ? chatbotData.responses.services[category.split(".")[1]]
-      : chatbotData.responses[category]
+      ? chatbotData.responses.services[category.split(".")[1] as keyof typeof chatbotData.responses.services]
+      : chatbotData.responses[category as keyof typeof chatbotData.responses]
 
     return Array.isArray(responses)
       ? responses[Math.floor(Math.random() * responses.length)]
