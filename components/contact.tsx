@@ -1,8 +1,8 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import type React from "react"
 
-import { useState } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -67,9 +67,19 @@ const initialFormData: FormData = {
 }
 
 export default function Contact() {
+  const [mounted, setMounted] = useState(false)
   const [formData, setFormData] = useState<FormData>(initialFormData)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Render a loading state or nothing on the server side
+  if (!mounted) {
+    return null
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
