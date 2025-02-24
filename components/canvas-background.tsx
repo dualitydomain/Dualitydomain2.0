@@ -57,7 +57,7 @@ export default function CanvasBackground() {
   const time = useRef(0)
 
   useEffect(() => {
-    if (typeof window === "undefined" || !containerRef.current) return
+    if (typeof window === "undefined") return
 
     // Setup
     const scene = new THREE.Scene()
@@ -68,11 +68,9 @@ export default function CanvasBackground() {
     })
 
     // Initial setup
-    if (typeof window !== "undefined") {
-      renderer.setSize(window.innerWidth, window.innerHeight)
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    }
-    containerRef.current.appendChild(renderer.domElement)
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    containerRef.current?.appendChild(renderer.domElement)
 
     // Post processing
     const composer = new EffectComposer(renderer)
@@ -175,25 +173,23 @@ export default function CanvasBackground() {
 
     // Resize handler
     const handleResize = () => {
-      if (typeof window === "undefined") return
       camera.aspect = window.innerWidth / window.innerHeight
       camera.updateProjectionMatrix()
       renderer.setSize(window.innerWidth, window.innerHeight)
       composer.setSize(window.innerWidth, window.innerHeight)
     }
 
-    if (typeof window !== "undefined") {
-      window.addEventListener("mousemove", onMouseMove)
-      window.addEventListener("resize", handleResize)
+    window.addEventListener("mousemove", onMouseMove)
+    window.addEventListener("resize", handleResize)
 
-      return () => {
-        window.removeEventListener("mousemove", onMouseMove)
-        window.removeEventListener("resize", handleResize)
-      }
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove)
+      window.removeEventListener("resize", handleResize)
     }
 
     // Animation
-    const animate = () => {
+    function animate() {
+      if (typeof window === "undefined") return
       requestAnimationFrame(animate)
       time.current += 0.01
 
@@ -263,3 +259,4 @@ export default function CanvasBackground() {
     />
   )
 }
+
