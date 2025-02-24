@@ -1,12 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import GlitchText from "@/components/glitch-text"
+import { useState, useEffect } from "react"
 
 const technologies = {
   frontend: [
@@ -102,7 +102,7 @@ function TechnologyCard({ tech, index }: { tech: (typeof technologies.frontend)[
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20, scale: mounted ? 0.9 : 1 }}
+      initial={{ opacity: 0, y: 20, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="group relative"
@@ -226,7 +226,7 @@ export default function TechnologiesPage() {
   }, [])
 
   if (!mounted) {
-    return null
+    return null // or a loading spinner
   }
 
   return (
