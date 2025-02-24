@@ -42,18 +42,20 @@ export default function MobileNav({ isOpen, onClose, services }: MobileNavProps)
   }, [isOpen])
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      })
-
-      const handleResize = () => {
+    const handleResize = () => {
+      if (typeof window !== "undefined") {
         setDimensions({
           width: window.innerWidth,
           height: window.innerHeight,
         })
       }
+    }
+
+    if (typeof window !== "undefined") {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
 
       window.addEventListener("resize", handleResize)
       return () => window.removeEventListener("resize", handleResize)
