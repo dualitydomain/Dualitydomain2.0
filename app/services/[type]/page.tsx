@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation"
 import ServiceLayout from "@/components/service-layout"
+import type { ServicesData } from "../types"
 
-const servicesData = {
+const servicesData: ServicesData = {
   "landing-pages": {
     title: "Landing Pages",
     subtitle: "Páginas diseñadas para campañas específicas",
@@ -81,7 +82,7 @@ const servicesData = {
     ],
     technologies: ["Next.js", "React", "TailwindCSS", "Framer Motion", "Google Analytics", "Hotjar"],
   },
-  // Añadir datos para otros servicios...
+  // Add other service types here...
 }
 
 export default function ServicePage({ params }: { params: { type: string } }) {
