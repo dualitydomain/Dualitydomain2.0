@@ -11,7 +11,7 @@ export default function ContactPage() {
   }, [])
 
   if (!mounted) {
-    return null
+    return null // or a loading spinner
   }
 
   return (
