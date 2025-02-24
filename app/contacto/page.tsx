@@ -1,8 +1,22 @@
-import dynamic from "next/dynamic"
+"use client"
 
-const ContactPage = dynamic(() => import("@/components/contact-page"), { ssr: false })
+import { useState, useEffect } from "react"
+import Contact from "@/components/contact"
 
-export default function Contact() {
-  return <ContactPage />
+export default function ContactPage() {
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  if (!isMounted) {
+    return null
+  }
+
+  return (
+    <div className="min-h-screen pt-16">
+      <Contact />
+    </div>
+  )
 }
-
