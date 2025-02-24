@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -13,6 +14,16 @@ interface ServiceHeroProps {
 }
 
 export default function ServiceHero({ title, subtitle, description, gradient }: ServiceHeroProps) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
+
   return (
     <section className="relative min-h-[60vh] flex items-center justify-center pt-16 overflow-hidden">
       {/* Background Effects */}
