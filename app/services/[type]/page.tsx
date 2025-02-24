@@ -1,3 +1,6 @@
+"use client"
+
+import { useState, useEffect } from "react"
 import { notFound } from "next/navigation"
 import ServiceLayout from "@/components/service-layout"
 import type { ServicesData } from "../types"
@@ -86,10 +89,20 @@ const servicesData: ServicesData = {
 }
 
 export default function ServicePage({ params }: { params: { type: string } }) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const serviceData = servicesData[params.type]
 
   if (!serviceData) {
     notFound()
+  }
+
+  if (!mounted) {
+    return null
   }
 
   return <ServiceLayout data={serviceData} />
