@@ -10,7 +10,6 @@ export default function ContactPage() {
     setMounted(true)
   }, [])
 
-  // Render a loading state or nothing on the server side
   if (!mounted) {
     return null
   }
