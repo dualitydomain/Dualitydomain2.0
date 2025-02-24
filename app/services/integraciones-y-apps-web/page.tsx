@@ -5,12 +5,12 @@ export default function IntegracionesYAppsWeb() {
     <ServicePage
       title="Integraciones y Apps Web"
       description="Desarrollamos aplicaciones web personalizadas e integramos sistemas para optimizar tu negocio."
-      features={
+      features={[
         "Desarrollo de APIs personalizadas",
         "Integración con servicios de terceros",
         "Automatización de procesos empresariales",
-        "Sincronización de datos entre plataformas",\
-      ]}\
+        "Sincronización de datos entre plataformas",
+      ]}
       benefits={[
         "Optimiza y agiliza tus procesos de negocio",
         "Mejora la colaboración entre equipos y departamentos",
