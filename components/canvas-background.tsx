@@ -1,9 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
-
-import { useRef } from "react"
-
+import { useEffect, useRef, useState } from "react"
 import * as THREE from "three"
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js"
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js"
@@ -55,9 +52,12 @@ export default function CanvasBackground() {
   const containerRef = useRef<HTMLDivElement>(null)
   const mousePosition = useRef({ x: 0, y: 0 })
   const time = useRef(0)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    if (typeof window === "undefined") return
+    setMounted(true)
+
+    if (!containerRef.current) return
 
     // Setup
     const scene = new THREE.Scene()
@@ -68,12 +68,11 @@ export default function CanvasBackground() {
     })
 
     // Initial setup
-    const windowWidth = typeof window !== "undefined" ? window.innerWidth : 1920
-    const windowHeight = typeof window !== "undefined" ? window.innerHeight : 1080
-
-    renderer.setSize(windowWidth, windowHeight)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    containerRef.current?.appendChild(renderer.domElement)
+    if (typeof window !== "undefined") {
+      renderer.setSize(window.innerWidth, window.innerHeight)
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    }
+    containerRef.current.appendChild(renderer.domElement)
 
     // Post processing
     const composer = new EffectComposer(renderer)
@@ -81,7 +80,7 @@ export default function CanvasBackground() {
     composer.addPass(renderPass)
 
     const bloomPass = new UnrealBloomPass(
-      new THREE.Vector2(windowWidth, windowHeight),
+      new THREE.Vector2(window.innerWidth, window.innerHeight),
       0.5, // strength
       0.4, // radius
       0.85, // threshold
@@ -97,6 +96,9 @@ export default function CanvasBackground() {
     const posArray = new Float32Array(particlesCount * 3)
 
     for (let i = 0; i < particlesCount * 3; i += 3) {
+      const windowWidth = typeof window !== "undefined" ? window.innerWidth : 1920
+      const windowHeight = typeof window !== "undefined" ? window.innerHeight : 1080
+
       posArray[i] = Math.random() * windowWidth
       posArray[i + 1] = Math.random() * windowHeight
       posArray[i + 2] = (Math.random() - 0.5) * 5
@@ -166,12 +168,12 @@ export default function CanvasBackground() {
     const onMouseMove = (event: MouseEvent) => {
       if (typeof window === "undefined") return
       mousePosition.current = {
-        x: (event.clientX / windowWidth) * 2 - 1,
-        y: -(event.clientY / windowHeight) * 2 + 1,
+        x: (event.clientX / window.innerWidth) * 2 - 1,
+        y: -(event.clientY / window.innerHeight) * 2 + 1,
       }
     }
 
-    // Resize handler
+    // Update the resize handler
     const handleResize = () => {
       if (typeof window === "undefined") return
       camera.aspect = window.innerWidth / window.innerHeight
@@ -180,17 +182,18 @@ export default function CanvasBackground() {
       composer.setSize(window.innerWidth, window.innerHeight)
     }
 
-    window.addEventListener("mousemove", onMouseMove)
-    window.addEventListener("resize", handleResize)
+    if (typeof window !== "undefined") {
+      window.addEventListener("mousemove", onMouseMove)
+      window.addEventListener("resize", handleResize)
 
-    return () => {
-      window.removeEventListener("mousemove", onMouseMove)
-      window.removeEventListener("resize", handleResize)
+      return () => {
+        window.removeEventListener("mousemove", onMouseMove)
+        window.removeEventListener("resize", handleResize)
+      }
     }
 
     // Animation
-    function animate() {
-      if (typeof window === "undefined") return
+    const animate = () => {
       requestAnimationFrame(animate)
       time.current += 0.01
 
@@ -251,6 +254,10 @@ export default function CanvasBackground() {
 
     animate()
   }, [])
+
+  if (!mounted) {
+    return null
+  }
 
   return (
     <div
