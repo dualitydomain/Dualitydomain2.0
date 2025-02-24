@@ -19,22 +19,6 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ],
-  "orientation": "portrait",
-  "lang": "es-AR",
-  "dir": "ltr",
-  "categories": ["business", "technology", "web development"],
-  "shortcuts": [
-    {
-      "name": "Contacto",
-      "url": "/contacto",
-      "description": "Contacta con nuestro equipo"
-    },
-    {
-      "name": "Proyectos",
-      "url": "/proyectos",
-      "description": "Ver nuestros proyectos"
-    }
   ]
 }
 
