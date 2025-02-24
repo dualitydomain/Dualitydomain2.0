@@ -1,6 +1,9 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
+
+import { useRef } from "react"
+
 import * as THREE from "three"
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer"
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass"
