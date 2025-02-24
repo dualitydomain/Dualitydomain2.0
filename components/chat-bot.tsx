@@ -212,11 +212,10 @@ export default function ChatBot() {
   }, [])
 
   const scrollToBottom = useCallback(() => {
-    if (typeof window !== "undefined") {
-      messagesEndRef.current?.scrollIntoView({
-        behavior: "smooth",
-      })
-    }
+    if (typeof window === "undefined") return
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    })
   }, [])
 
   useEffect(() => {
