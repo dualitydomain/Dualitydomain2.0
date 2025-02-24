@@ -20,6 +20,8 @@ export default function NeuralBackground() {
   const mouseRef = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
+    if (typeof window === "undefined") return
+
     const canvas = canvasRef.current
     if (!canvas) return
 
@@ -35,7 +37,7 @@ export default function NeuralBackground() {
 
     // Ajustar el canvas al tamaño de la ventana
     const resizeCanvas = () => {
-      if (typeof window === "undefined") return
+      if (typeof window === "undefined" || !canvas) return
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
     }
@@ -155,6 +157,7 @@ export default function NeuralBackground() {
 
     // Event listeners
     const handleMouseMove = (e: MouseEvent) => {
+      if (typeof window === "undefined" || !canvas) return
       const rect = canvas.getBoundingClientRect()
       mouseRef.current = {
         x: e.clientX - rect.left,
@@ -163,7 +166,7 @@ export default function NeuralBackground() {
     }
 
     const handleResize = () => {
-      if (typeof window === "undefined") return
+      if (typeof window === "undefined" || !canvas) return
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
       initNeurons()
