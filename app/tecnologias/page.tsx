@@ -90,16 +90,6 @@ const technologies = {
 }
 
 function TechnologyCard({ tech, index }: { tech: (typeof technologies.frontend)[0]; index: number }) {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
-    return null
-  }
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20, scale: 0.9 }}
@@ -225,8 +215,9 @@ export default function TechnologiesPage() {
     setMounted(true)
   }, [])
 
+  // Render a loading state or nothing on the server side
   if (!mounted) {
-    return null // or a loading spinner
+    return null
   }
 
   return (
