@@ -26,6 +26,9 @@ npm install @radix-ui/react-scroll-area @radix-ui/react-select --save
 log "Installing json-loader..."
 npm install json-loader --save-dev
 
+log "Installing glob package..."
+npm install glob@latest --save
+
 log "Listing installed packages:"
 npm list --depth=0
 
