@@ -1,6 +1,3 @@
-"use client"
-
-import { useState, useEffect } from "react"
 import Header from "@/components/header"
 import Hero from "@/components/hero"
 import Services from "@/components/services"
@@ -11,16 +8,6 @@ import Contact from "@/components/contact"
 import Footer from "@/components/footer"
 
 export default function Home() {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
-    return null // or a loading placeholder
-  }
-
   return (
     <>
       <Header />
@@ -36,4 +23,3 @@ export default function Home() {
     </>
   )
 }
-
