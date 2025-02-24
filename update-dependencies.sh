@@ -8,11 +8,11 @@ log() {
 
 log "Starting dependency update..."
 
-log "Installing/updating dependencies..."
-npm install inflight@latest three@latest @types/three@latest --save
+log "Updating dependencies..."
+npm update
 
 log "Listing updated packages:"
-npm list inflight three @types/three
+npm list --depth=0
 
 log "Update completed successfully"
 
