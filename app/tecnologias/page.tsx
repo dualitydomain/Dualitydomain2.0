@@ -215,6 +215,16 @@ function TechnologyCard({ tech, index }: { tech: (typeof technologies.frontend)[
 }
 
 export default function TechnologiesPage() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null // or a loading placeholder
+  }
+
   return (
     <div className="min-h-screen pt-16">
       <section className="py-24 relative overflow-hidden">
@@ -332,3 +342,4 @@ export default function TechnologiesPage() {
     </div>
   )
 }
+
