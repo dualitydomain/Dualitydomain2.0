@@ -29,5 +29,8 @@ npm install json-loader --save-dev
 log "Listing installed packages:"
 npm list --depth=0
 
+log "Running update-dependencies script..."
+bash ./update-dependencies.sh
+
 log "Installation completed successfully"
 
