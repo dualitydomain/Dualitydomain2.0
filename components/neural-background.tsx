@@ -10,6 +10,11 @@ interface Neuron {
   connections: number[]
 }
 
+interface DistanceResult {
+  index: number
+  distance: number
+}
+
 export default function NeuralBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const mouseRef = useRef({ x: 0, y: 0 })
@@ -79,9 +84,9 @@ export default function NeuralBackground() {
     const updateConnections = () => {
       neurons.forEach((neuron) => {
         neuron.connections = []
-        const distances = neurons
+        const distances: DistanceResult[] = neurons
           .map((other, index) => {
-            if (other === neuron) return Number.POSITIVE_INFINITY
+            if (other === neuron) return { index, distance: Number.POSITIVE_INFINITY }
             const dx = other.x - neuron.x
             const dy = other.y - neuron.y
             return { index, distance: Math.sqrt(dx * dx + dy * dy) }
