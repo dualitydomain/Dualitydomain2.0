@@ -12,6 +12,15 @@ const nextConfig = {
       },
     ],
   },
+  webpack: (config, { isServer }) => {
+    // Add JSON loader
+    config.module.rules.push({
+      test: /\.json$/,
+      type: "json",
+    })
+
+    return config
+  },
   experimental: {
     optimizeCss: true,
     turbo: {
