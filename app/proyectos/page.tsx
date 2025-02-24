@@ -248,13 +248,8 @@ function ProjectCard({ project }: { project: (typeof projects)[0] }) {
 }
 
 export default function ProjectsPage() {
-  const [mounted, setMounted] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -373,4 +368,3 @@ export default function ProjectsPage() {
     </div>
   )
 }
-
