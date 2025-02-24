@@ -261,6 +261,7 @@ export default function ProjectsPage() {
       })
     }
 
+    // Only run on client-side
     if (typeof window !== "undefined") {
       setDimensions({
         width: window.innerWidth,
@@ -279,8 +280,9 @@ export default function ProjectsPage() {
   const filteredProjects =
     selectedCategory === "all" ? projects : projects.filter((project) => project.category === selectedCategory)
 
+  // Render a loading state or nothing on the server side
   if (!mounted) {
-    return null // or a loading spinner
+    return null
   }
 
   return (
