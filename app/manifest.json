@@ -1,0 +1,47 @@
+{
+  "name": "Duality Domain - Desarrollo Web y Diseño Digital",
+  "short_name": "Duality Domain",
+  "description": "Expertos en desarrollo web, diseño digital y soluciones tecnológicas en Villa del Dique, Córdoba.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#002133",
+  "theme_color": "#5CE1E6",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "orientation": "portrait",
+  "lang": "es-AR",
+  "dir": "ltr",
+  "categories": ["business", "technology", "web development"],
+  "screenshots": [
+    {
+      "src": "/screenshot1.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Contacto",
+      "url": "/contacto",
+      "description": "Contacta con nuestro equipo"
+    },
+    {
+      "name": "Proyectos",
+      "url": "/proyectos",
+      "description": "Ver nuestros proyectos"
+    }
+  ]
+}
+
