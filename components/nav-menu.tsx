@@ -1,62 +1,24 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, ChevronDown, ChevronRight } from "lucide-react"
+import { X, ChevronDown, ChevronRight } from "lucide-react"
 import Link from "next/link"
 
-const services = [
-  {
-    title: "Landing Pages",
-    description: "Páginas de alto impacto para conversión",
-    href: "/servicios/landing-pages",
-  },
-  {
-    title: "Sitios Web Corporativos",
-    description: "Presencia profesional para tu empresa",
-    href: "/servicios/sitios-corporativos",
-  },
-  {
-    title: "Tiendas Online (E-Commerce)",
-    description: "Plataformas de venta digital",
-    href: "/servicios/ecommerce",
-  },
-  {
-    title: "Blogs & Portafolios",
-    description: "Espacios para compartir contenido",
-    href: "/servicios/blogs-portfolios",
-  },
-  {
-    title: "Plataformas Web & Dashboards",
-    description: "Sistemas de gestión y control",
-    href: "/servicios/plataformas-dashboards",
-  },
-  {
-    title: "Sistemas de Membresía",
-    description: "Plataformas de contenido exclusivo",
-    href: "/servicios/sistemas-membresia",
-  },
-  {
-    title: "Sistemas de Reservas",
-    description: "Gestión de citas y disponibilidad",
-    href: "/servicios/sistemas-reservas",
-  },
-  {
-    title: "Portales de Noticias",
-    description: "Medios digitales y revistas",
-    href: "/servicios/portales-noticias",
-  },
-  {
-    title: "Webs Interactivas",
-    description: "Experiencias digitales inmersivas",
-    href: "/servicios/webs-interactivas",
-  },
-  {
-    title: "Integraciones & Apps Web",
-    description: "Soluciones conectadas y APIs",
-    href: "/servicios/integraciones-apps",
-  },
-]
+interface MobileNavProps {
+  isOpen: boolean
+  onClose: () => void
+  services: Array<{
+    category: string
+    items: Array<{
+      title: string
+      description: string
+      href: string
+      gradient: string
+      icon: string
+    }>
+  }>
+}
 
 const menuItems = [
   { title: "Inicio", href: "/" },
@@ -66,174 +28,262 @@ const menuItems = [
   { title: "Contacto", href: "/contacto" },
 ]
 
-export default function NavMenu() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [showServices, setShowServices] = useState(false)
-  const [hoveredService, setHoveredService] = useState<number | null>(null)
+export default function MobileNav({ isOpen, onClose, services }: MobileNavProps) {
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
+  const [hoveredService, setHoveredService] = useState<string | null>(null)
+  const [animationComplete, setAnimationComplete] = useState(false)
+
+  useEffect(() => {
+    if (!isOpen) {
+      setExpandedCategory(null)
+      setAnimationComplete(false)
+    }
+  }, [isOpen])
 
   return (
-    <>
-      {/* Desktop Navigation */}
-      <nav className="hidden md:flex items-center space-x-1">
-        {menuItems.map((item, index) => (
-          <div key={index} className="relative group">
-            {item.hasSubmenu ? (
-              <button
-                onClick={() => setShowServices(!showServices)}
-                className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-zinc-200 hover:text-white transition-colors group"
-              >
-                {item.title}
-                <motion.span animate={{ rotate: showServices ? 180 : 0 }} transition={{ duration: 0.2 }}>
-                  <ChevronDown className="h-4 w-4" />
-                </motion.span>
-              </button>
-            ) : (
-              <Link
-                href={item.href}
-                className="px-4 py-2 text-sm font-medium text-zinc-200 hover:text-white transition-colors"
-              >
-                {item.title}
-              </Link>
-            )}
-
-            {/* Services Dropdown */}
-            {item.hasSubmenu && (
-              <AnimatePresence>
-                {showServices && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute top-full left-0 w-[300px] bg-[#001219]/95 backdrop-blur-xl rounded-lg border border-white/10 shadow-xl z-50"
-                  >
-                    <div className="grid gap-2 p-4">
-                      {services.map((service, idx) => (
-                        <Link
-                          key={idx}
-                          href={service.href}
-                          className="relative group/item"
-                          onMouseEnter={() => setHoveredService(idx)}
-                          onMouseLeave={() => setHoveredService(null)}
-                        >
-                          {hoveredService === idx && (
-                            <motion.span
-                              layoutId="service-hover"
-                              className="absolute inset-0 bg-white/5 rounded-lg"
-                              transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
-                            />
-                          )}
-                          <div className="relative p-2 rounded-lg group-hover/item:bg-white/5 transition-colors">
-                            <div className="flex items-center justify-between">
-                              <span className="font-medium text-white">{service.title}</span>
-                              <ChevronRight className="h-4 w-4 text-zinc-400 group-hover/item:text-white transition-colors" />
-                            </div>
-                            <p className="text-sm text-zinc-400 group-hover/item:text-zinc-300 transition-colors">
-                              {service.description}
-                            </p>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            )}
-          </div>
-        ))}
-      </nav>
-
-      {/* Mobile Menu Button */}
-      <button onClick={() => setIsOpen(true)} className="md:hidden text-white hover:text-[#5CE1E6] transition-colors">
-        <Menu className="h-6 w-6" />
-      </button>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isOpen && (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop with neural network effect */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 md:hidden"
-            onClick={() => setIsOpen(false)}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            onClick={onClose}
           >
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 20 }}
-              className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-[#001219]/90 backdrop-blur-md p-6"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Mobile Menu Header */}
+            <div className="absolute inset-0 overflow-hidden">
+              {[...Array(20)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-1 h-1 bg-[#5CE1E6] rounded-full"
+                  initial={{
+                    x: typeof window !== "undefined" ? Math.random() * window.innerWidth : 0,
+                    y: typeof window !== "undefined" ? Math.random() * window.innerHeight : 0,
+                    opacity: 0,
+                  }}
+                  animate={{
+                    opacity: [0, 1, 0],
+                    x: typeof window !== "undefined" ? Math.random() * window.innerWidth : 0,
+                    y: typeof window !== "undefined" ? Math.random() * window.innerHeight : 0,
+                  }}
+                  transition={{
+                    duration: Math.random() * 3 + 2,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "linear",
+                  }}
+                />
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Menu Panel */}
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 20 }}
+            onAnimationComplete={() => setAnimationComplete(true)}
+            className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-[#001219]/90 backdrop-blur-md z-50"
+          >
+            {/* Animated Background */}
+            <div className="absolute inset-0 overflow-hidden">
+              <motion.div
+                animate={{
+                  scale: [1, 1.1, 1],
+                  rotate: [0, 5, -5, 0],
+                }}
+                transition={{
+                  duration: 10,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "easeInOut",
+                }}
+                className="absolute inset-0 bg-gradient-to-br from-[#5CE1E6]/10 via-transparent to-orange-500/10 rounded-full blur-3xl"
+              />
+            </div>
+
+            {/* Content */}
+            <div className="relative h-full p-6 flex flex-col">
+              {/* Header */}
               <div className="flex justify-between items-center mb-8">
-                <h2 className="text-xl font-bold text-white">Menú</h2>
-                <button
-                  onClick={() => setIsOpen(false)}
+                <motion.h2
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="text-xl font-bold text-white"
+                >
+                  Menú
+                </motion.h2>
+                <motion.button
+                  initial={{ opacity: 0, rotate: -90 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={onClose}
                   className="p-2 hover:bg-white/10 rounded-full transition-colors"
                 >
                   <X className="h-6 w-6 text-white" />
-                </button>
+                </motion.button>
               </div>
 
-              {/* Mobile Menu Items */}
-              <div className="space-y-4">
-                {menuItems.map((item, index) => (
-                  <div key={index}>
-                    {item.hasSubmenu ? (
-                      <div className="space-y-2">
-                        <button
-                          onClick={() => setShowServices(!showServices)}
-                          className="flex items-center justify-between w-full p-2 text-white hover:text-[#5CE1E6] transition-colors"
+              {/* Navigation Links */}
+              <nav className="flex-1 overflow-y-auto">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="space-y-6"
+                >
+                  <Link
+                    href="/"
+                    onClick={onClose}
+                    className="block text-lg font-medium text-white hover:text-[#5CE1E6] transition-colors"
+                  >
+                    Inicio
+                  </Link>
+
+                  {/* Services Accordion */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-medium text-white">Servicios</h3>
+                    <div className="space-y-2">
+                      {services.map((category, index) => (
+                        <motion.div
+                          key={category.category}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.3 + index * 0.1 }}
+                          className="border-b border-white/10 last:border-none"
                         >
-                          <span>{item.title}</span>
-                          <motion.span animate={{ rotate: showServices ? 180 : 0 }} transition={{ duration: 0.2 }}>
-                            <ChevronDown className="h-4 w-4" />
-                          </motion.span>
-                        </button>
-                        <AnimatePresence>
-                          {showServices && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: "auto", opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              className="overflow-hidden pl-4"
+                          <button
+                            onClick={() =>
+                              setExpandedCategory(expandedCategory === category.category ? null : category.category)
+                            }
+                            className="flex items-center justify-between w-full py-2 text-white hover:text-[#5CE1E6] transition-colors"
+                          >
+                            <span>{category.category}</span>
+                            <motion.span
+                              animate={{ rotate: expandedCategory === category.category ? 180 : 0 }}
+                              transition={{ duration: 0.2 }}
                             >
-                              <div className="space-y-2 border-l border-white/10 pl-4">
-                                {services.map((service, idx) => (
-                                  <Link
-                                    key={idx}
-                                    href={service.href}
-                                    onClick={() => setIsOpen(false)}
-                                    className="block p-2 text-zinc-300 hover:text-white transition-colors"
-                                  >
-                                    <div className="text-sm font-medium">{service.title}</div>
-                                    <div className="text-xs text-zinc-400">{service.description}</div>
-                                  </Link>
-                                ))}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    ) : (
-                      <Link
-                        href={item.href}
-                        onClick={() => setIsOpen(false)}
-                        className="block p-2 text-white hover:text-[#5CE1E6] transition-colors"
-                      >
-                        {item.title}
-                      </Link>
-                    )}
+                              <ChevronDown className="h-4 w-4" />
+                            </motion.span>
+                          </button>
+
+                          <AnimatePresence>
+                            {expandedCategory === category.category && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="overflow-hidden"
+                              >
+                                <div className="py-2 space-y-2">
+                                  {category.items.map((service, serviceIndex) => (
+                                    <Link
+                                      key={service.title}
+                                      href={service.href}
+                                      onClick={onClose}
+                                      onMouseEnter={() => setHoveredService(service.title)}
+                                      onMouseLeave={() => setHoveredService(null)}
+                                      className="block relative p-2 rounded-lg group"
+                                    >
+                                      {hoveredService === service.title && (
+                                        <motion.span
+                                          layoutId="mobile-service-hover"
+                                          className="absolute inset-0 bg-white/5 rounded-lg"
+                                          transition={{ type: "spring", bounce: 0.3 }}
+                                        />
+                                      )}
+                                      <div className="relative flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                          <span className="text-lg">{service.icon}</span>
+                                          <div>
+                                            <span
+                                              className={`text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r ${service.gradient}`}
+                                            >
+                                              {service.title}
+                                            </span>
+                                            <p className="text-xs text-zinc-400 group-hover:text-zinc-300">
+                                              {service.description}
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <ChevronRight className="h-4 w-4 text-zinc-400 group-hover:text-[#5CE1E6] transition-colors" />
+                                      </div>
+                                    </Link>
+                                  ))}
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </motion.div>
+                      ))}
+                    </div>
                   </div>
-                ))}
-              </div>
-            </motion.div>
+
+                  <Link
+                    href="/proyectos"
+                    onClick={onClose}
+                    className="block text-lg font-medium text-white hover:text-[#5CE1E6] transition-colors"
+                  >
+                    Proyectos
+                  </Link>
+                  <Link
+                    href="/tecnologias"
+                    onClick={onClose}
+                    className="block text-lg font-medium text-white hover:text-[#5CE1E6] transition-colors"
+                  >
+                    Tecnologías
+                  </Link>
+                  <Link
+                    href="/contacto"
+                    onClick={onClose}
+                    className="block text-lg font-medium text-white hover:text-[#5CE1E6] transition-colors"
+                  >
+                    Contacto
+                  </Link>
+                </motion.div>
+              </nav>
+
+              {/* Footer */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="pt-4 mt-auto"
+              >
+                <div className="p-4 rounded-lg bg-gradient-to-r from-[#5CE1E6]/20 to-transparent backdrop-blur-sm">
+                  <p className="text-sm text-white/80">¿Listo para comenzar tu proyecto?</p>
+                  <Link
+                    href="/contacto"
+                    onClick={onClose}
+                    className="mt-2 inline-block text-[#5CE1E6] hover:text-white transition-colors"
+                  >
+                    Contáctanos →
+                  </Link>
+                </div>
+              </motion.div>
+
+              {/* Decorative elements */}
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.2 }}
+                className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#5CE1E6]/50 to-transparent"
+              />
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.2 }}
+                className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#5CE1E6]/50 to-transparent"
+              />
+            </div>
           </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+        </>
+      )}
+    </AnimatePresence>
   )
 }
 
