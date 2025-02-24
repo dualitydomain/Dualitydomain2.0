@@ -4,13 +4,13 @@ import { useState, useEffect } from "react"
 import Contact from "@/components/contact"
 
 export default function ContactPage() {
-  const [isMounted, setIsMounted] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setIsMounted(true)
+    setMounted(true)
   }, [])
 
-  if (!isMounted) {
+  if (!mounted) {
     return null
   }
 
@@ -20,3 +20,4 @@ export default function ContactPage() {
     </div>
   )
 }
+
