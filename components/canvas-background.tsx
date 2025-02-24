@@ -57,7 +57,7 @@ export default function CanvasBackground() {
   const time = useRef(0)
 
   useEffect(() => {
-    if (!containerRef.current) return
+    if (typeof window === "undefined" || !containerRef.current) return
 
     // Setup
     const scene = new THREE.Scene()
@@ -166,6 +166,7 @@ export default function CanvasBackground() {
 
     // Mouse movement
     const onMouseMove = (event: MouseEvent) => {
+      if (typeof window === "undefined") return
       mousePosition.current = {
         x: (event.clientX / window.innerWidth) * 2 - 1,
         y: -(event.clientY / window.innerHeight) * 2 + 1,
