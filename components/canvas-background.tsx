@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import * as THREE from "three"
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js"
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js"
@@ -52,12 +52,9 @@ export default function CanvasBackground() {
   const containerRef = useRef<HTMLDivElement>(null)
   const mousePosition = useRef({ x: 0, y: 0 })
   const time = useRef(0)
-  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-
-    if (!containerRef.current) return
+    if (typeof window === "undefined" || !containerRef.current) return
 
     // Setup
     const scene = new THREE.Scene()
@@ -173,7 +170,7 @@ export default function CanvasBackground() {
       }
     }
 
-    // Update the resize handler
+    // Resize handler
     const handleResize = () => {
       if (typeof window === "undefined") return
       camera.aspect = window.innerWidth / window.innerHeight
@@ -254,10 +251,6 @@ export default function CanvasBackground() {
 
     animate()
   }, [])
-
-  if (!mounted) {
-    return null
-  }
 
   return (
     <div
