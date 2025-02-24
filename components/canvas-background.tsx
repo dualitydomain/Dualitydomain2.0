@@ -5,10 +5,10 @@ import { useEffect } from "react"
 import { useRef } from "react"
 
 import * as THREE from "three"
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer"
-import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass"
-import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass"
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass"
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js"
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js"
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js"
 
 // Custom shader for the glitch effect
 const GlitchShader = {
