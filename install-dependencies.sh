@@ -3,7 +3,7 @@
 set -e
 
 log() {
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
 }
 
 log "Starting dependency installation..."
@@ -16,8 +16,8 @@ npm cache clean --force
 
 log "Installing dependencies with --legacy-peer-deps..."
 if ! npm install --legacy-peer-deps; then
-    log "Installation with --legacy-peer-deps failed, trying with --force..."
-    npm install --force
+  log "Installation with --legacy-peer-deps failed, trying with --force..."
+  npm install --force
 fi
 
 log "Installing specific Radix UI dependencies..."
@@ -28,6 +28,12 @@ npm install json-loader --save-dev
 
 log "Installing glob package..."
 npm install glob@latest --save
+
+log "Installing @eslint/object-schema..."
+npm install @eslint/object-schema@latest --save-dev
+
+log "Removing deprecated @humanwhocodes/object-schema..."
+npm uninstall @humanwhocodes/object-schema
 
 log "Listing installed packages:"
 npm list --depth=0
