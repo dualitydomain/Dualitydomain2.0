@@ -1,3 +1,6 @@
+"use client"
+
+import { useState, useEffect } from "react"
 import Header from "@/components/header"
 import Hero from "@/components/hero"
 import Services from "@/components/services"
@@ -8,6 +11,16 @@ import Contact from "@/components/contact"
 import Footer from "@/components/footer"
 
 export default function Home() {
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  if (!isMounted) {
+    return null
+  }
+
   return (
     <>
       <Header />
@@ -23,3 +36,4 @@ export default function Home() {
     </>
   )
 }
+
