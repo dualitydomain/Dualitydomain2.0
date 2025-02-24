@@ -68,7 +68,10 @@ export default function CanvasBackground() {
     })
 
     // Initial setup
-    renderer.setSize(window.innerWidth, window.innerHeight)
+    const windowWidth = typeof window !== "undefined" ? window.innerWidth : 1920
+    const windowHeight = typeof window !== "undefined" ? window.innerHeight : 1080
+
+    renderer.setSize(windowWidth, windowHeight)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     containerRef.current?.appendChild(renderer.domElement)
 
@@ -78,7 +81,7 @@ export default function CanvasBackground() {
     composer.addPass(renderPass)
 
     const bloomPass = new UnrealBloomPass(
-      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      new THREE.Vector2(windowWidth, windowHeight),
       0.5, // strength
       0.4, // radius
       0.85, // threshold
@@ -94,9 +97,6 @@ export default function CanvasBackground() {
     const posArray = new Float32Array(particlesCount * 3)
 
     for (let i = 0; i < particlesCount * 3; i += 3) {
-      const windowWidth = typeof window !== "undefined" ? window.innerWidth : 1920
-      const windowHeight = typeof window !== "undefined" ? window.innerHeight : 1080
-
       posArray[i] = Math.random() * windowWidth
       posArray[i + 1] = Math.random() * windowHeight
       posArray[i + 2] = (Math.random() - 0.5) * 5
@@ -166,13 +166,14 @@ export default function CanvasBackground() {
     const onMouseMove = (event: MouseEvent) => {
       if (typeof window === "undefined") return
       mousePosition.current = {
-        x: (event.clientX / window.innerWidth) * 2 - 1,
-        y: -(event.clientY / window.innerHeight) * 2 + 1,
+        x: (event.clientX / windowWidth) * 2 - 1,
+        y: -(event.clientY / windowHeight) * 2 + 1,
       }
     }
 
     // Resize handler
     const handleResize = () => {
+      if (typeof window === "undefined") return
       camera.aspect = window.innerWidth / window.innerHeight
       camera.updateProjectionMatrix()
       renderer.setSize(window.innerWidth, window.innerHeight)
