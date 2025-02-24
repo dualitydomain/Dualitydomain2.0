@@ -1,32 +1,26 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+import Header from "@/components/header"
+import Hero from "@/components/hero"
+import Services from "@/components/services"
+import Features from "@/components/features"
+import Projects from "@/components/projects"
+import Testimonials from "@/components/testimonials"
+import Contact from "@/components/contact"
+import Footer from "@/components/footer"
 
-@layer utilities {
-  .animation-delay-2000 {
-    animation-delay: 2s;
-  }
-  .animation-delay-4000 {
-    animation-delay: 4s;
-  }
-}
-
-@keyframes blob {
-  0% {
-    transform: translate(0px, 0px) scale(1);
-  }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
-  100% {
-    transform: translate(0px, 0px) scale(1);
-  }
-}
-
-.animate-blob {
-  animation: blob 7s infinite;
+export default function Home() {
+  return (
+    <>
+      <Header />
+      <main className="min-h-screen bg-[#002133] text-white overflow-hidden">
+        <Hero />
+        <Services />
+        <Features />
+        <Projects />
+        <Testimonials />
+        <Contact />
+      </main>
+      <Footer />
+    </>
+  )
 }
 
