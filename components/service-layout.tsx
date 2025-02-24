@@ -1,5 +1,6 @@
 "use client"
 
+import type { ServiceData } from "@/app/services/types"
 import ServiceHero from "./service-sections/hero"
 import ServiceFeatures from "./service-sections/features"
 import ServiceBenefits from "./service-sections/benefits"
@@ -9,29 +10,7 @@ import ServiceTech from "./service-sections/tech"
 import ServiceCTA from "./service-sections/cta"
 
 interface ServiceLayoutProps {
-  data: {
-    title: string
-    subtitle: string
-    description: string
-    gradient: string
-    features: Array<{
-      title: string
-      description: string
-      icon: string
-    }>
-    benefits: string[]
-    process: Array<{
-      title: string
-      description: string
-    }>
-    examples: Array<{
-      title: string
-      description: string
-      image: string
-      stats: string[]
-    }>
-    technologies: string[]
-  }
+  data: ServiceData
 }
 
 export default function ServiceLayout({ data }: ServiceLayoutProps) {
