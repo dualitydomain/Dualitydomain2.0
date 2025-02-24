@@ -24,13 +24,6 @@
   "lang": "es-AR",
   "dir": "ltr",
   "categories": ["business", "technology", "web development"],
-  "screenshots": [
-    {
-      "src": "/screenshot1.jpg",
-      "sizes": "1280x720",
-      "type": "image/jpeg"
-    }
-  ],
   "shortcuts": [
     {
       "name": "Contacto",
