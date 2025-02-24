@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils"
 interface DesktopServicesMenuProps {
   services: Array<{
     category: string
+    icon: string
     items: Array<{
       title: string
       description: string
