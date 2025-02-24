@@ -193,22 +193,22 @@ export default function ChatBot() {
   const [viewport, setViewport] = useState({ width: 0, height: 0 })
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window === "undefined") return
+
+    setViewport({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    })
+
+    const handleResize = () => {
       setViewport({
         width: window.innerWidth,
         height: window.innerHeight,
       })
-
-      const handleResize = () => {
-        setViewport({
-          width: window.innerWidth,
-          height: window.innerHeight,
-        })
-      }
-
-      window.addEventListener("resize", handleResize)
-      return () => window.removeEventListener("resize", handleResize)
     }
+
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
   }, [])
 
   const scrollToBottom = useCallback(() => {
