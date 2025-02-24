@@ -66,8 +66,12 @@ export default function CanvasBackground() {
       alpha: true,
       antialias: true,
     })
-    renderer.setSize(window.innerWidth, window.innerHeight)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+    // Initial setup
+    if (typeof window !== "undefined") {
+      renderer.setSize(window.innerWidth, window.innerHeight)
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    }
     containerRef.current.appendChild(renderer.domElement)
 
     // Post processing
@@ -90,14 +94,18 @@ export default function CanvasBackground() {
     const particlesGeometry = new THREE.BufferGeometry()
     const particlesCount = 2000
     const posArray = new Float32Array(particlesCount * 3)
+
+    for (let i = 0; i < particlesCount * 3; i += 3) {
+      const windowWidth = typeof window !== "undefined" ? window.innerWidth : 1920
+      const windowHeight = typeof window !== "undefined" ? window.innerHeight : 1080
+
+      posArray[i] = Math.random() * windowWidth
+      posArray[i + 1] = Math.random() * windowHeight
+      posArray[i + 2] = (Math.random() - 0.5) * 5
+    }
     const velocityArray = new Float32Array(particlesCount * 3)
 
     for (let i = 0; i < particlesCount * 3; i += 3) {
-      // Position
-      posArray[i] = (Math.random() - 0.5) * 5
-      posArray[i + 1] = (Math.random() - 0.5) * 5
-      posArray[i + 2] = (Math.random() - 0.5) * 5
-
       // Velocity
       velocityArray[i] = (Math.random() - 0.5) * 0.01
       velocityArray[i + 1] = (Math.random() - 0.5) * 0.01
@@ -164,7 +172,24 @@ export default function CanvasBackground() {
       }
     }
 
-    window.addEventListener("mousemove", onMouseMove)
+    // Resize handler
+    const handleResize = () => {
+      if (typeof window === "undefined") return
+      camera.aspect = window.innerWidth / window.innerHeight
+      camera.updateProjectionMatrix()
+      renderer.setSize(window.innerWidth, window.innerHeight)
+      composer.setSize(window.innerWidth, window.innerHeight)
+    }
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("mousemove", onMouseMove)
+      window.addEventListener("resize", handleResize)
+
+      return () => {
+        window.removeEventListener("mousemove", onMouseMove)
+        window.removeEventListener("resize", handleResize)
+      }
+    }
 
     // Animation
     const animate = () => {
@@ -227,23 +252,6 @@ export default function CanvasBackground() {
     }
 
     animate()
-
-    // Resize handler
-    const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight
-      camera.updateProjectionMatrix()
-      renderer.setSize(window.innerWidth, window.innerHeight)
-      composer.setSize(window.innerWidth, window.innerHeight)
-    }
-
-    window.addEventListener("resize", handleResize)
-
-    // Cleanup
-    return () => {
-      window.removeEventListener("mousemove", onMouseMove)
-      window.removeEventListener("resize", handleResize)
-      containerRef.current?.removeChild(renderer.domElement)
-    }
   }, [])
 
   return (
