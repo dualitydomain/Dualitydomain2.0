@@ -1,5 +1,11 @@
 [build]
-  command = "bash ./install-dependencies.sh && npm run build"
+  command = """
+    set -e
+    echo "Node version: $(node -v)"
+    echo "NPM version: $(npm -v)"
+    bash ./install-dependencies.sh
+    npm run build || (echo "Build failed" && exit 1)
+  """
   publish = ".next"
 
 [build.environment]
