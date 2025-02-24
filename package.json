@@ -37,7 +37,7 @@
     "tailwindcss": "^3.3.5",
     "typescript": "^5.2.2",
     "@types/three": "^0.160.0",
-    "critters": "^0.0.16"
+    "@eslint/object-schema": "^1.0.0"
   }
 }
 
