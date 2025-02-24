@@ -35,6 +35,7 @@ export default function NeuralBackground() {
 
     // Ajustar el canvas al tamaño de la ventana
     const resizeCanvas = () => {
+      if (typeof window === "undefined") return
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
     }
@@ -162,21 +163,25 @@ export default function NeuralBackground() {
     }
 
     const handleResize = () => {
-      resizeCanvas()
+      if (typeof window === "undefined") return
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
       initNeurons()
     }
 
     // Inicialización
-    resizeCanvas()
-    initNeurons()
-    animate()
+    if (typeof window !== "undefined") {
+      resizeCanvas()
+      initNeurons()
+      animate()
 
-    window.addEventListener("mousemove", handleMouseMove)
-    window.addEventListener("resize", handleResize)
+      window.addEventListener("mousemove", handleMouseMove)
+      window.addEventListener("resize", handleResize)
 
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove)
-      window.removeEventListener("resize", handleResize)
+      return () => {
+        window.removeEventListener("mousemove", handleMouseMove)
+        window.removeEventListener("resize", handleResize)
+      }
     }
   }, [])
 
