@@ -26,6 +26,9 @@ npm install json-loader --save-dev
 log "Installing glob package..."
 npm install glob@latest --save
 
+log "Installing critters..."
+npm install critters --save
+
 log "Listing installed packages:"
 npm list --depth=0
 
