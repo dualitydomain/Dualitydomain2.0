@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
@@ -249,6 +249,26 @@ function ProjectCard({ project }: { project: (typeof projects)[0] }) {
 
 export default function ProjectsPage() {
   const [selectedCategory, setSelectedCategory] = useState("all")
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+
+      const handleResize = () => {
+        setDimensions({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        })
+      }
+
+      window.addEventListener("resize", handleResize)
+      return () => window.removeEventListener("resize", handleResize)
+    }
+  }, [])
 
   const filteredProjects =
     selectedCategory === "all" ? projects : projects.filter((project) => project.category === selectedCategory)
@@ -316,7 +336,12 @@ export default function ProjectsPage() {
 
               {/* Projects Grid */}
               <TabsContent value={selectedCategory} className="mt-12">
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div
+                  className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+                  style={{
+                    minHeight: dimensions.height ? `${dimensions.height * 0.6}px` : "auto",
+                  }}
+                >
                   {filteredProjects.map((project, index) => (
                     <ProjectCard key={index} project={project} />
                   ))}
